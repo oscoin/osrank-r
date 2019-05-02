@@ -8,9 +8,22 @@ library("rmarkdown")
 library("data.table")
 library("igraph")
 
+# download dependencies dataset from https://libraries.io/data (if file doesn't exist)
+destfile="dependencies-1.4.0.csv"
+fn <- "https://zenodo.org/record/2536573/files/Libraries.io-open-data-1.4.0.tar.gz"
+if(!file.exists(destfile)){
+  res <- tryCatch(download.file(fn,
+                                destfile="dependencies-1.4.0.tar.gz",
+                                method="auto"),
+                  error=function(e) 1)
+}
+
+# uncompress dependencies
+untar("dependencies-1.4.0.tar.gz",files="dependencies-1.4.0.csv")
+
 # read dependencies dataset from https://libraries.io/data
 # sample with nrows instead of importing the whole file
-dependencies <- read.csv(file = "dependencies-1.2.0-2018-03-12.csv", 
+dependencies <- read.csv(file = "dependencies-1.4.0.csv", 
                          header = TRUE, colClasses=c("NULL", NA, NA, NA, NA,
                                                      NA, NA, NA, NA, 
                                                      "NULL", "NULL", NA)
